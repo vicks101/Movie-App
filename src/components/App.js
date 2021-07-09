@@ -1,11 +1,39 @@
 import React from 'react';
+import { data } from '../data';
+import Navbar from './Navbar';
+import MovieCard from './MovieCard';
+import {addMovies} from '../actions'
 
-function App() {
+class App extends React.Component {
+ componentDidMount(){
+   //make api
+   this.props.store.subscribe(()=>{
+      this.forceUpdate();//never use
+   });
+   this.props.store.dispatch(addMovies(data));
+   console.log('STATE',this.props.store.getState());
+ }
+  render(){
+    const {list}=this.props.store.getState();
+    console.log('RENDER');
   return (
     <div className="App">
-     Project Setup
+      <Navbar/>
+      <div className="main">
+        <div className="tabs">
+        <div className="tab"> Movies</div>
+        <div className="tab"> Favourite</div>
+      </div>
+      <div className="list">
+        {list.map((movie,index)=>(
+          <MovieCard movie={movie} key={'movies-${index}'} />
+
+        ))}
+         </div>
+        </div>
     </div>
   );
+}
 }
 
 export default App;
